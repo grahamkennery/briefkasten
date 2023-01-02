@@ -2,6 +2,7 @@ import NextAuth from 'next-auth'
 import GithubProvider from 'next-auth/providers/github'
 import GoogleProvider from 'next-auth/providers/google'
 import EmailProvider from 'next-auth/providers/email'
+import KeycloakProvider from 'next-auth/providers/keycloak'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import prisma from '@/lib/prisma'
 
@@ -28,6 +29,15 @@ if (process.env.SMTP_SERVER && process.env.SMTP_FROM) {
     EmailProvider({
       server: process.env.SMTP_SERVER,
       from: process.env.SMTP_FROM,
+    })
+  )
+}
+if (process.env.KEYCLOAK_ID) {
+  providers.push(
+    KeycloakProvider({
+      clientId: process.env.KEYCLOAK_ID,
+      clientSecret: process.env.KEYCLOAK_SECRET,
+      issuer: process.env.KEYCLOAK_ISSUER,
     })
   )
 }
